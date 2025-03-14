@@ -1,0 +1,25 @@
+<mat-toolbar>
+    Bill List
+  </mat-toolbar>
+  
+  <div class="container">
+    <mat-accordion multi="true" *ngIf="bills.length > 0">
+      <mat-expansion-panel *ngFor="let bill of bills">
+        <mat-expansion-panel-header>
+          Bill ID: {{ bill._id }} - Date: {{ bill.date | date }}
+        </mat-expansion-panel-header>
+  
+        <div *ngFor="let item of bill.items">
+          <p>{{ item.product.name }} - ₹{{ item.product.price }} x {{ item.quantity }} = ₹{{ item.total }}</p>
+        </div>
+  
+        <p><strong>Total Bill Amount: ₹{{ calculateBillTotal(bill) }}</strong></p>
+  
+        <mat-action-row>
+          <button mat-raised-button class="mat-warn" (click)="onDelete(bill._id)">DELETE</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </mat-accordion>
+  
+    <p *ngIf="bills.length <= 0" class="info-text mat-body-1">No bills added yet</p>
+  </div>

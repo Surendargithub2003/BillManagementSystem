@@ -1,0 +1,43 @@
+<mat-toolbar>
+  Product DataBase
+</mat-toolbar>
+<mat-card>
+  <form (submit)="onAddProduct(productForm)" #productForm="ngForm">
+    <mat-form-field>
+      <mat-label>Product Name</mat-label>
+      <input matInput type="text" name="name" [(ngModel)]="newProduct.name" required #name="ngModel">
+      <mat-error *ngIf="name.invalid">Please enter a product name.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Price</mat-label>
+      <input matInput type="number" name="price" [(ngModel)]="newProduct.price" required #price="ngModel">
+      <mat-error *ngIf="price.invalid">Please enter a valid price.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Stock</mat-label>
+      <input matInput type="number" name="stock" [(ngModel)]="newProduct.stock" required #stock="ngModel">
+      <mat-error *ngIf="stock.invalid">Please enter stock quantity.</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button class="add-prd" color="primary" type="submit" [disabled]="productForm.invalid">Add Product</button>
+  </form>
+</mat-card>
+
+<div class="container">
+  <mat-accordion multi="true" *ngIf="products.length > 0">
+    <mat-expansion-panel *ngFor="let product of products">
+      <mat-expansion-panel-header>
+        {{ product.name }} - ₹{{ product.price }}
+      </mat-expansion-panel-header>
+      <p>Stock: {{ product.stock }}</p>
+      <mat-action-row>
+        <button mat-raised-button color="primary" (click)="onEdit(product)">EDIT</button>
+        <button mat-raised-button class="mat-warn" (click)="onDelete(product._id)">DELETE</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <p *ngIf="products.length <= 0" class="info-text mat-body-1">No products added yet</p>
+</div>

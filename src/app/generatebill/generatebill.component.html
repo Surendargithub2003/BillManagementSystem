@@ -1,0 +1,57 @@
+<mat-toolbar>
+    <h2>Generate Bill</h2>
+  </mat-toolbar>
+<div class="bill-container">
+   
+  <div class="product-selection">
+    <label>Select Product:</label>
+    <select id="productSelect" [(ngModel)]="selectedProduct">
+      <option [ngValue]="null">Select a product</option>
+      <option *ngFor="let product of products" [ngValue]="product">
+        {{ product.name }} - ₹{{ product.price }}
+      </option>
+    </select>
+  </div>
+  <div class="quantity-input" >
+    <label for="quantity">Quantity:</label>
+    <button mat-icon-button (click)="decrementQuantity()">
+        <mat-icon>remove</mat-icon>
+      </button>
+    <input type="number" id="quantity" [(ngModel)]="quantity" min="1" value="1" />
+    <button mat-icon-button (click)="incrementQuantity()">
+        <mat-icon class="add">add</mat-icon>
+      </button>
+  </div>
+  <button mat-raised-button (click)="addProductToBill()">Add to Bill</button>
+  <div class="bill-items" *ngIf="billItems.length > 0">
+    <h3>Bill Items:</h3>
+    <table >
+      <thead>
+        <tr>
+          <th>Product Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of billItems; let i = index">
+          <td>{{ item.product.name }}</td>
+          <td>₹{{ item.product.price }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>₹{{ item.total }}</td>
+          <td>
+            <button mat-button (click)="removeItem(i)">Remove</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="total" *ngIf="billItems.length > 0">
+    <h3>Total: ₹{{ calculateTotal() }}</h3>
+  </div>
+
+  <button  mat-raised-button  (click)="generateBill()" *ngIf="billItems.length > 0">Generate Bill</button>
+</div>
