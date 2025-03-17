@@ -100,6 +100,12 @@ app.delete('/api/products/:id', (req: any, res: any) => {
   });
 });
 
+app.delete('/api/bills/:id', (req: any, res: any) => {
+  Bill.deleteOne({ _id: req.params.id }).then(() => {
+    res.status(200).json({ message: 'Bill deleted!' });
+  });
+});
+
 app.post('/api/bills', (req: any, res: any) => {
   const bill = new Bill({
     items: req.body.items,

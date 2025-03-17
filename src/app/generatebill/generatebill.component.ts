@@ -6,6 +6,7 @@ interface Product {
   _id: string; 
   name: string;
   price: number;
+  stock : number;
 }
 
 interface BillItem {
@@ -22,10 +23,12 @@ interface BillItem {
 })
 export class GeneratebillComponent implements OnInit {
   products: Product[] = [];
+  newProducts : Product[] = [] ;
+  newProduct : Product = {_id : "" ,name : "" , price: 0 , stock : 0};
   selectedProduct: Product | null = null;
   quantity: number = 1;
   billItems: BillItem[] = [];
-
+  public updatedStock : number =0
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
@@ -35,12 +38,20 @@ export class GeneratebillComponent implements OnInit {
   fetchProducts() {
     this.http.get<{ message: string; products: Product[] }>('http://localhost:3000/api/products')
       .subscribe(response => {
-        this.products = response.products;
+        this.products = response.products.filter(product => product.stock > 0);
+       this.newProducts = [...this.products];
       });
   }
 
   addProductToBill() {
-    if (this.selectedProduct && this.quantity > 0) {
+    if (this.selectedProduct && this.quantity > 0 ) {
+      if (this.quantity > this.selectedProduct.stock) {
+        alert(`Only ${this.selectedProduct.stock} items available in stock.`);
+        return;
+      }
+      this.newProduct = this.selectedProduct;
+      const availablestock = this.selectedProduct.stock
+      this.updatedStock = availablestock - this.quantity;       
       const total = this.selectedProduct.price * this.quantity;
       this.billItems.push({
         product: this.selectedProduct,
@@ -62,6 +73,14 @@ export class GeneratebillComponent implements OnInit {
   
 
   generateBill() {
+    if(this.newProduct)
+    this.http.put(`http://localhost:3000/api/products/${this.newProduct._id}`,{
+      ...this.newProduct,
+      stock: this.updatedStock
+  }).subscribe(() => {
+    this.fetchProducts();  
+  });
+
     this.http.get('bill-template.html', { responseType: 'text' }).subscribe(template => {
       let printWindow = window.open('', '_blank');
       

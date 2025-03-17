@@ -30,7 +30,6 @@ export class BillingComponent implements OnInit {
   onAddProduct(form: any) {
     if (form.valid) {
       if (this.isEditing && this.editingProductId) {
-        // **Update existing product**
         this.http.put(`http://localhost:3000/api/products/${this.editingProductId}`, this.newProduct)
           .subscribe(() => {
             this.fetchProducts();
@@ -81,7 +80,7 @@ export class BillingComponent implements OnInit {
   }
   filterProducts() {
     if (!this.searchQuery) {
-      this.fetchProducts(); // Reset to original list if search query is empty
+      this.fetchProducts(); 
       return;
     }
   

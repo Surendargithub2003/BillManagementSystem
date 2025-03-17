@@ -3,3 +3,7 @@ mat-toolbar{
     color: white;
     margin-bottom: 10px;
   }
+
+  .stock-sold{
+    margin-left: 70%;
+  }

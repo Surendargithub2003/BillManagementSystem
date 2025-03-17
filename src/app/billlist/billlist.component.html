@@ -1,16 +1,31 @@
 <mat-toolbar>
   Bill List
+  <div class="stock-sold">
+    No of Products Sold :{{ total_stock}}
+  </div>
 </mat-toolbar>
-
+<div class="search-container">
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Search Bills</mat-label>
+      <input matInput [(ngModel)]="searchQuery" (keyup)="filterProducts()" placeholder="Enter Bill Id">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Filter by Month</mat-label>
+        <mat-select [(ngModel)]="selectedMonth" (selectionChange)="filterByMonth()">
+          <mat-option *ngFor="let month of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="month">
+            {{ month }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+  </div>
 <div class="container">
   <table mat-table [dataSource]="bills" class="mat-elevation-z8" *ngIf="bills.length > 0">
-     
       <ng-container matColumnDef="billId">
           <th mat-header-cell *matHeaderCellDef> Bill ID </th>
           <td mat-cell *matCellDef="let bill"> {{ bill._id }} </td>
       </ng-container>
 
-      
       <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef> Date </th>
           <td mat-cell *matCellDef="let bill"> {{ bill.date | date }} </td>
