@@ -1,30 +1,69 @@
-mat-toolbar{
+mat-toolbar {
     background-color: rgb(101, 101, 255);
     color: white;
     margin-bottom: 40px;
-}
-
-.bill-container{
-    width: 400px;
+  }
+  
+  .bill-container {
+    width: 500px;
     margin: 20px auto;
     padding: 20px;
     border: 2px solid #d5e0ff;
     border-radius: 24px;
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.product-selection {
+  }
+  
+  .product-selection,
+  .quantity-input {
     margin-bottom: 20px;
-}
-
-.quantity-input{
-    margin-bottom: 20px;
-}
-
-#quantity{
-    width: 30px
-}
-mat-icon{
+  }
+  
+  #quantity {
+    width: 30px;
+    text-align: center;
+    margin: 0 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  mat-icon {
     position: relative;
     top: 5px;
-}
+  }
+  
+  .quantity-controls {
+    display: flex;
+    align-items: center;
+  }
+  
+  .bill-items h3 {
+    margin-top: 20px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th,td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  .total {
+    margin-top: 20px;
+    text-align: right;
+  }
+  
+

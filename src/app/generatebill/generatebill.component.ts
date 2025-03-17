@@ -62,37 +62,44 @@ export class GeneratebillComponent implements OnInit {
   
 
   generateBill() {
-    let printWindow = window.open('', '_blank');
+    this.http.get('bill-template.html', { responseType: 'text' }).subscribe(template => {
+      let printWindow = window.open('', '_blank');
+      
+      if (printWindow) {
+        printWindow.document.write(template);
+        printWindow.document.close();
+        printWindow.focus();
   
-    if (printWindow) {
-      let billContent = `
-        <html>
-        <head><title>Bill</title>
-        <style>
-          body { font-family: sans-serif; }
-          pre { white-space: pre-wrap; word-break: break-word; }
-        </style>
-        </head>
-        <body>
-            <h2>Generated Bill</h2>
-      `;
-      this.billItems.forEach(item => {
-        billContent += `<pre>${item.product.name} - ₹${item.product.price} x ${item.quantity} = ₹${item.total}</pre>`;
-      });
-      billContent += `<h3>Total: ₹${this.calculateTotal()}</h3>
-        </body>
-        </html>
-      `;
-      printWindow.document.write(billContent);
-      printWindow.document.close();
-      printWindow.focus();
-      printWindow.print();
-      printWindow.close(); 
-      this.saveBillItems();
-    } else {
-      alert("Please allow popups for printing.");
-    }
+        setTimeout(() => {
+          let billBody = printWindow.document.getElementById("bill-body");
+          let billTotal = printWindow.document.getElementById("bill-total");
+  
+          if (billBody && billTotal) {
+            this.billItems.forEach(item => {
+              let row = printWindow.document.createElement("tr");
+              row.innerHTML = `
+                <td>${item.product.name}</td>
+                <td>₹${item.product.price}</td>
+                <td>${item.quantity}</td>
+                <td>₹${item.total}</td>
+              `;
+              billBody.appendChild(row);
+            });
+  
+            billTotal.innerText = `Total: ₹${this.calculateTotal()}`;
+          }
+  
+          printWindow.print();
+          printWindow.close();
+        }, 500);
+        
+        this.saveBillItems();
+      } else {
+        alert("Please allow popups for printing.");
+      }
+    });
   }
+  
 
  
   incrementQuantity() {
@@ -107,7 +114,7 @@ export class GeneratebillComponent implements OnInit {
  
   saveBillItems() {
     const billItemsToSave = this.billItems.map(item => ({
-      product: item.product._id, // Send only the product _id
+      product: item.product._id, 
       quantity: item.quantity,
       total: item.total
     }));

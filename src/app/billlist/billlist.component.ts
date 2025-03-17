@@ -47,6 +47,8 @@ export class BillListComponent implements OnInit {
       .subscribe(() => {
         this.fetchBills();
       });
+
+    
   }
 
   calculateBillTotal(bill: Bill): number {

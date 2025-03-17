@@ -5,39 +5,70 @@
   <form (submit)="onAddProduct(productForm)" #productForm="ngForm">
     <mat-form-field>
       <mat-label>Product Name</mat-label>
-      <input matInput type="text" name="name" [(ngModel)]="newProduct.name" required #name="ngModel">
+      <input matInput type="text" name="name" [(ngModel)]="newProduct.name" required #name="ngModel" >
       <mat-error *ngIf="name.invalid">Please enter a product name.</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Price</mat-label>
-      <input matInput type="number" name="price" [(ngModel)]="newProduct.price" required #price="ngModel">
+      <input matInput type="number" name="price" [(ngModel)]="newProduct.price" required min = "1" #price="ngModel">
       <mat-error *ngIf="price.invalid">Please enter a valid price.</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Stock</mat-label>
-      <input matInput type="number" name="stock" [(ngModel)]="newProduct.stock" required #stock="ngModel">
+      <input matInput type="number" name="stock" [(ngModel)]="newProduct.stock" required min = "1" #stock="ngModel">
       <mat-error *ngIf="stock.invalid">Please enter stock quantity.</mat-error>
     </mat-form-field>
 
-    <button mat-raised-button class="add-prd" color="primary" type="submit" [disabled]="productForm.invalid">Add Product</button>
+    <button mat-raised-button class="add-prd" color="primary" type="submit" [disabled]="productForm.invalid">{{ isEditing ? 'Update Product' : 'Add Product' }}</button>
+    
+    <button class="cancel" *ngIf="isEditing" mat-raised-button color="warn" type="button" (click)="onCancelEdit()"> Cancel </button> 
   </form>
 </mat-card>
 
+<div class="search-container">
+  <mat-form-field class="full-width" appearance="outline">
+    <mat-label>Search Products</mat-label>
+    <input matInput [(ngModel)]="searchQuery" (keyup)="filterProducts()" placeholder="Enter product name">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+
+
 <div class="container">
-  <mat-accordion multi="true" *ngIf="products.length > 0">
-    <mat-expansion-panel *ngFor="let product of products">
-      <mat-expansion-panel-header>
-        {{ product.name }} - ₹{{ product.price }}
-      </mat-expansion-panel-header>
-      <p>Stock: {{ product.stock }}</p>
-      <mat-action-row>
+  <table mat-table [dataSource]="products" class="mat-elevation-z8" *ngIf="products.length > 0">
+    
+ 
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Product Name </th>
+      <td mat-cell *matCellDef="let product"> {{ product.name }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price (₹) </th>
+      <td mat-cell *matCellDef="let product"> ₹{{ product.price }} </td>
+    </ng-container>
+
+  
+    <ng-container matColumnDef="stock">
+      <th mat-header-cell *matHeaderCellDef> Stock </th>
+      <td mat-cell *matCellDef="let product"> {{ product.stock }} </td>
+    </ng-container>
+
+ 
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let product">
         <button mat-raised-button color="primary" (click)="onEdit(product)">EDIT</button>
         <button mat-raised-button class="mat-warn" (click)="onDelete(product._id)">DELETE</button>
-      </mat-action-row>
-    </mat-expansion-panel>
-  </mat-accordion>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['name', 'price', 'stock', 'actions']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['name', 'price', 'stock', 'actions'];"></tr>
+
+  </table>
 
   <p *ngIf="products.length <= 0" class="info-text mat-body-1">No products added yet</p>
 </div>

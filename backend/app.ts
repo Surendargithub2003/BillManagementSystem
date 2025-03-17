@@ -83,7 +83,7 @@ app.get('/api/products', (req: any, res: any) => {
 
 app.put('/api/products/:id', (req: any, res: any) => {
   const product = new Product({
-    _id: req.body.id,
+    _id: req.body._id,
     name: req.body.name,
     price: req.body.price,
     stock: req.body.stock,

@@ -1,5 +1,5 @@
 .container {
-    max-width: 800px;
+    max-width: 1000px;
     margin: auto;
   }
   
@@ -22,4 +22,19 @@ mat-form-field{
 mat-toolbar{
   background-color: rgb(101, 101, 255);
   color: white;
+}
+.search-container {
+  margin-bottom: 16px;
+  padding: 10px;
+  width: 600px;
+  margin: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+.cancel{
+  position: relative;
+  bottom: 10px;
+  left: 15px;
 }
